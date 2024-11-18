@@ -8,8 +8,9 @@ int main() {
     Player ryan;
 
     while(WindowShouldClose() == false){
+        ryan.Update();
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(RAYWHITE);
         ryan.Draw();
         EndDrawing();
     }

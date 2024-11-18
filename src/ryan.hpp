@@ -5,6 +5,7 @@ class Player{
 private:
     Texture2D image;
     Vector2 position;
+    int speed;
 public:
     Player();
     ~Player();
