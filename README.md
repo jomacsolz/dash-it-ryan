@@ -3,7 +3,7 @@ A project for CMSC 123
 
 ## Introduction
 
-The game is inspired by the classic endless runner genre which aims to combine nostalgia with new mechanics. The idea is influenced by popular games like Super Mario Bros and Temple Run which focuses on challenging yet rewarding gameplay.
+The game is inspired by the classic endless runner genre which aims to combine nostalgia with new mechanics. The idea is influenced by popular games like _Super Mario Bros_ and _Temple Run_ which focuses on challenging yet rewarding gameplay.
 
 Genre: Platformer
 
