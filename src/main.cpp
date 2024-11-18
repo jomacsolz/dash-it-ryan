@@ -1,7 +1,6 @@
-#include <iostream>
-#include "raylib.h"
+#include <raylib.h>
 
-int main(){
+int main() {
     InitWindow(1280, 720, "Run It Ryan");
     SetTargetFPS(60);
 
@@ -11,6 +10,6 @@ int main(){
         DrawText("Run It Ryan", 10, 10, 20, DARKGRAY);
         EndDrawing();
     }
-
-    return 0;
+    
+    CloseWindow();
 }
