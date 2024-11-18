@@ -1,13 +1,16 @@
 #include <raylib.h>
+#include "ryan.hpp"
 
 int main() {
     InitWindow(1280, 720, "Run It Ryan");
     SetTargetFPS(60);
 
+    Player ryan;
+
     while(WindowShouldClose() == false){
         BeginDrawing();
-        ClearBackground(RAYWHITE);
-        DrawText("Run It Ryan", 10, 10, 20, DARKGRAY);
+        ClearBackground(WHITE);
+        ryan.Draw();
         EndDrawing();
     }
     
