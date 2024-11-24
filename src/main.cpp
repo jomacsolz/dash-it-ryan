@@ -12,7 +12,7 @@ int main() {
 
     int fpsCounter = 0;
     
-    SetTargetFPS(120);
+    SetTargetFPS(60);
 
     BG bg;
     Player ryan;
