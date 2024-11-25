@@ -1,23 +1,32 @@
 #include "ryan.hpp"
 
 Player::Player(){
-    image = LoadTexture("assets/dino.png");
-    position.x = 100;
-    position.y = 100;
+    ryan = LoadTexture("assets/ryan.png");
+    position = {(1280/25), (3*720)/4};
     speed = 10;
+
+    currentFrame = 0;
+    framesCounter = 0;
+    framesSpeed = 8;
+    frameRec = {0.0f, 0.0f, (float)ryan.width/6, (float)ryan.height};
 }
 
 Player::~Player(){
-    UnloadTexture(image);
+    UnloadTexture(ryan);
 }
 
 void Player::Draw(){
-    DrawTextureV(image, position, WHITE);
+    DrawTextureRec(ryan, frameRec, position, WHITE);
 }
 
 void Player::Update(){
-    if(IsKeyDown(KEY_RIGHT)) position.x += speed;
-    if(IsKeyDown(KEY_LEFT)) position.x -= speed;
-    if(IsKeyDown(KEY_UP)) position.y -= speed;
-    if(IsKeyDown(KEY_DOWN)) position.y += speed;
+    framesCounter++;
+    if(framesCounter >= (60 / framesSpeed)){
+        framesCounter = 0;
+        currentFrame++;
+
+        if(currentFrame > 5)
+            currentFrame = 0;
+        frameRec.x = (float)currentFrame*(float)ryan.width/6;
+    }
 }
