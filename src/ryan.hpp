@@ -6,6 +6,8 @@ typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
 class Player{
 private:
     Texture2D ryan;
+    float ground;
+    Vector2 velocity;
     Vector2 position;
     int speed;
 
@@ -19,4 +21,5 @@ public:
     ~Player();
     void Draw();
     void Update();
+    bool isOnGround();
 };
