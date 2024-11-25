@@ -23,7 +23,7 @@ int main() {
             {
                 fpsCounter++;
                 if(fpsCounter > 60)
-                    currentScreen = GAMEPLAY;
+                    currentScreen = TITLE;
             } break;
             case TITLE:
             {
