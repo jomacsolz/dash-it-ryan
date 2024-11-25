@@ -1,7 +1,7 @@
 #include "ryan.hpp"
 
 Player::Player(){
-    ryan = LoadTexture("assets/scarfy.png");
+    ryan = LoadTexture("assets/ryan.png");
     position = {(1280/25), (3*720)/4};
     speed = 10;
 
