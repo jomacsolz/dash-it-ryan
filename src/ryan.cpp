@@ -6,8 +6,14 @@ Player::Player(){
     ground = (3*720)/4;
     velocity = {0.0f, 0.0f};
     position = {(1280/25), ground};
-    speed = 20;
 
+    // jump vars
+    isJumping = false;
+    onGround = true;
+    jumpDuration = 0.0f;
+    verticalVelocity = 0.0f;
+
+    // Animation variables
     currentFrame = 0;
     framesCounter = 0;
     framesSpeed = 8;
@@ -23,13 +29,34 @@ void Player::Draw(){
 }
 
 void Player::Update(){
-    if(isOnGround() && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE))){
-        velocity.y = -speed;
+    if(onGround && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE))){
+        isJumping = true;
+        jumpDuration = 0.0f;
+        onGround = false;
     }
 
-    position = Vector2Add(position, velocity);
+    if(isJumping){
+        if((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE)) && jumpDuration < maxJump)
+            jumpDuration += GetFrameTime();
+        else
+            isJumping = false;
+    }
 
-    if(isOnGround()){
+    if(isJumping){
+        float t = jumpDuration/maxJump;
+        verticalVelocity = -jumpSpeed * (1-t*t);
+    }else
+        verticalVelocity += gravity * GetFrameTime();
+
+    position.y += verticalVelocity * GetFrameTime();
+    if(position.y > ground){
+        position.y = ground;
+        verticalVelocity = 0.0f;
+        onGround = true;
+    }
+
+    // Animation
+    if(onGround){
         velocity.y = 0;
         position.y = ground;
         framesCounter++;
@@ -42,15 +69,17 @@ void Player::Update(){
             frameRec.x = (float)currentFrame*(float)ryan.width/6;
         }
     }else{
-        currentFrame = 3;
+        currentFrame = 0;
         frameRec.x = (float)currentFrame*(float)ryan.width/6;
         velocity.y += 1;
     }
 }
 
-bool Player::isOnGround(){
-    if(position.y >= ground){
-        return true;
-    }else
-        return false;
+Rectangle Player::GetRect(){
+    return Rectangle{position.x, position.y, float(ryan.width/6), float(ryan.height)};
+}
+
+void Player::DrawHitbox(bool isColliding){
+    Color outlineColor = isColliding ? RED : GREEN;
+    DrawRectangleLinesEx(GetRect(), 3, outlineColor);
 }
