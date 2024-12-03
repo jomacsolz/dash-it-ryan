@@ -1,6 +1,11 @@
 #include <raylib.h>
 #include "ryan.hpp"
 #include "bg.hpp"
+#include "obstacle.hpp"
+
+bool CheckCollision(Player &player, Obstacle &obstacle){
+    return CheckCollisionRecs(player.GetRect(), obstacle.GetRect());
+}
 
 int main() {
     const int screenWidth = 1280;
@@ -16,6 +21,7 @@ int main() {
 
     BG bg;
     Player ryan;
+    Obstacle obby;
 
     while(!WindowShouldClose()){
         switch(currentScreen){
@@ -32,13 +38,15 @@ int main() {
             } break;
             case GAMEPLAY:
             {
-                if(IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+                if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_TAB))
                     currentScreen = ENDING;
             } break;
             case ENDING:
             {
-                if(IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+                if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_TAB)){
                     currentScreen = TITLE;
+                    obby.InitObstacle(); // re-initialize obstacle
+                }
             } break;
             default: break;
         }
@@ -67,17 +75,30 @@ int main() {
                 } break;
                 case GAMEPLAY:
                 {
+                    // Draw Background
                     ClearBackground(RAYWHITE);
                     bg.Draw();
+                    
+
+                    // Obstacle Draw
+                    obby.Update();
+
+
+                    // Player Draw
                     ryan.Draw();
+                    ryan.DrawHitbox(false);
+
+                    if(CheckCollision(ryan, obby)){
+                        currentScreen = ENDING;
+                    }
                 } break;
                 case ENDING:
                 {
                     DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
                     textWidth = MeasureText("Game Over", 40);
                     DrawText("Game Over", (screenWidth - textWidth) / 2, (screenHeight - 40) / 2, 40, LIGHTGRAY);
-                    textWidth = MeasureText("Press Enter or Tap to Restart", 20);
-                    DrawText("Press Enter or Tap to Restart", (screenWidth - textWidth) / 2, (screenHeight - 20) / 2 + 40, 20, GRAY);
+                    textWidth = MeasureText("Press Enter or Tab to Restart", 20);
+                    DrawText("Press Enter or Tab to Restart", (screenWidth - textWidth) / 2, (screenHeight - 20) / 2 + 40, 20, GRAY);
                 } break;
                 default: break;
             }
