@@ -7,6 +7,7 @@ BG::BG(){
     scrollBack = 0.0f;
     scrollMid = 0.0f;
     scrollFore = 0.0f;
+    bgSpeed = 1.0f;
 }
 
 BG::~BG(){
@@ -27,11 +28,21 @@ void BG::Draw(){
 }
 
 void BG::Update(){
-    scrollBack -= 0.1f;
-    scrollMid -= 0.5f;
-    scrollFore -= 1.0f;
+    scrollBack -= 0.1f * bgSpeed;
+    scrollMid -= 0.5f * bgSpeed;
+    scrollFore -= 1.0f * bgSpeed;
 
     if(scrollBack <= -background.width*7) scrollBack = 0;
     if(scrollMid <= -midground.width*7) scrollMid = 0;
     if(scrollFore <= -foreground.width*7) scrollFore = 0;
+}
+
+void BG::SpeedUp(float x){
+    bgSpeed += x;
+    std::cout << "Background speed increased: " << bgSpeed << std::endl;
+}
+
+void BG::resetSpeed(){
+    bgSpeed = 1.0f;
+    std::cout << "Background speed reset: " << bgSpeed << std::endl;
 }

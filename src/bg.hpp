@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <raylib.h>
 
 class BG{
@@ -9,9 +10,12 @@ private:
     float scrollBack;
     float scrollMid;
     float scrollFore;
+    float bgSpeed;
 public:
     BG();
     ~BG();
     void Draw();
     void Update();
+    void SpeedUp(float);
+    void resetSpeed();
 };
