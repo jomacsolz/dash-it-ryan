@@ -49,6 +49,11 @@ int main(){
     float scale = 0.5f;
     float posX = (screenWidth - logo.width * scale) / 2;
     float posY = (screenHeight - logo.height * scale) / 2 - 200;
+
+    // SFX
+    Music gameBGM = LoadMusicStream("assets/audio/ingame.wav");
+    Music menuBGM = LoadMusicStream("assets/audio/menu.wav");
+    Sound deathSFX = LoadSound("assets/audio/death.wav");
     
     SetTargetFPS(60);
 
@@ -56,8 +61,13 @@ int main(){
     Player ryan;
     ObstacleSpawn obby;
 
+    PlayMusicStream(menuBGM);
+
     // Main game loop
     while(!WindowShouldClose()){
+        UpdateMusicStream(menuBGM);
+        UpdateMusicStream(gameBGM);
+
         switch(currentScreen){
             case LOGO:
             {
@@ -67,14 +77,17 @@ int main(){
             } break;
             case TITLE:
             {
-                if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_TAB))
+                if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_TAB)){
                     currentScreen = GAMEPLAY;
+                    StopMusicStream(menuBGM);
+                    PlayMusicStream(gameBGM);
+                }
                 mousePoint = GetMousePosition();
                 btnAction = false;
 
                 if(CheckCollisionPointRec(mousePoint, btnBounds)){
                     if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) btnState = 2;
-                    else btnState = 1;
+                    else btnState = 0;
 
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
                 }else btnState = 0;
@@ -82,6 +95,8 @@ int main(){
                 if(btnAction){
                     // PlaySound(fxButton); // button sfx
                     currentScreen = GAMEPLAY;
+                    StopMusicStream(menuBGM);
+                    PlayMusicStream(gameBGM);
                 }
 
                 sourceRec.y = btnState*frameHeight;
@@ -160,6 +175,8 @@ int main(){
 
                     if(CheckCollision(ryan, obby.getObstacles())){
                         currentScreen = ENDING;
+                        PlaySound(deathSFX);
+                        StopMusicStream(gameBGM);
                     }
                 } break;
                 case ENDING:
@@ -181,6 +198,9 @@ int main(){
     UnloadTexture(button);
     UnloadTexture(logo);
     UnloadTexture(menu);
+    UnloadSound(deathSFX);
+    UnloadMusicStream(gameBGM);
+    UnloadMusicStream(menuBGM);
     
     CloseAudioDevice();
     CloseWindow();
