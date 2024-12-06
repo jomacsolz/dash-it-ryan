@@ -6,6 +6,7 @@ Player::Player(){
     ground = (3*720)/4;
     velocity = {0.0f, 0.0f};
     position = {(1280/25), ground};
+    jumpSFX = LoadSound("assets/audio/jump.wav");
 
     // jump vars
     isJumping = false;
@@ -22,6 +23,7 @@ Player::Player(){
 
 Player::~Player(){
     UnloadTexture(ryan);
+    UnloadSound(jumpSFX);
 }
 
 void Player::Draw(){
@@ -33,6 +35,7 @@ void Player::Update(){
         isJumping = true;
         jumpDuration = 0.0f;
         onGround = false;
+        PlaySound(jumpSFX);
     }
 
     if(isJumping){
