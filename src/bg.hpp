@@ -6,9 +6,11 @@ class BG{
 private:
     Texture2D background;
     Texture2D midground;
+    Texture2D midground2;
     Texture2D foreground;
     float scrollBack;
     float scrollMid;
+    float scrollMid2;
     float scrollFore;
     float bgSpeed;
 public:
@@ -18,4 +20,6 @@ public:
     void Update();
     void SpeedUp(float);
     void resetSpeed();
+    float scaleImg(Texture2D img);
 };
+
