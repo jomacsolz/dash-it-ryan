@@ -1,39 +1,32 @@
 #include "obstacle.hpp"
 
 Obstacle::Obstacle(){
-    // texture = LoadTexture("assets/hitbox.png");
-    hitbox.width = 50;
-    hitbox.height = 50;
-    hitbox.x = GetScreenWidth();
-    hitbox.y = (3*720)/4 + hitbox.height;
+    obs = LoadTexture("assets/obstacle.png");
+    position = {(float)GetScreenWidth(), (3*720)/4 + 50};
     speed = 8.0f;
     speedMulti = 1.0f;
 }
 
 Obstacle::~Obstacle(){
-    UnloadTexture(texture);
+    UnloadTexture(obs);
 }
 
 void Obstacle::InitObstacle(float multiplier){
-    hitbox.width = 50;
-    hitbox.height = 50;
-    hitbox.x = GetScreenWidth();
-    hitbox.y = (3*720)/4 + hitbox.height;
+    position = {(float)GetScreenWidth(), (3*720)/4 + 50};
     speed = 8.0f;
     speedMulti = multiplier;
 }
 
 void Obstacle::Draw(){
-    // Draw obstacle texture here
 }
 
 void Obstacle::Update(){
-    hitbox.x -= speed * speedMulti;
-    DrawRectangleLinesEx(hitbox, 5, RED);
+    position.x -= speed * speedMulti;
+    DrawRectangleLinesEx(GetRect(), 5, RED);
 }
 
 Rectangle Obstacle::GetRect(){
-    return hitbox;
+    return Rectangle{position.x, position.y, 50, 50};
 }
 
 void Obstacle::SpeedUp(float x){
@@ -48,7 +41,7 @@ void Obstacle::resetSpeed(){
 
 ObstacleSpawn::ObstacleSpawn(){
     spawnTimer = 0.0f;
-    spawnInterval = 1.0f; // Initial spawn interval
+    spawnInterval = 1.0f;
     globalSpeed = 1.0f;
 }
 
@@ -72,8 +65,9 @@ void ObstacleSpawn::Update(){
 }
 
 void ObstacleSpawn::Draw(){
-    for(auto& obstacle : obstacles)
+    for(auto& obstacle : obstacles){
         obstacle.Draw();
+    }
 }
 
 void ObstacleSpawn::SpeedUp(float x){

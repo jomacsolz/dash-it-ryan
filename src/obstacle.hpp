@@ -8,11 +8,10 @@
 
 class Obstacle{
 private:
-    Texture2D texture;
-    Rectangle hitbox;
+    Texture2D obs;
+    Vector2 position;
     float speed;
     float speedMulti;
-
 public:
     Obstacle();
     ~Obstacle();
@@ -20,6 +19,7 @@ public:
     void Draw();
     void Update();
     Rectangle GetRect();
+    Texture2D getTexture(){return obs;}
 
     // speed functions
     void SpeedUp(float);
