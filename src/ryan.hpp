@@ -1,11 +1,11 @@
 #pragma once
 #include <raylib.h>
 
-typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
+typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, INSTRUCTION1, INSTRUCTION2, ENDING } GameScreen;
 
 const float maxJump = 0.35f;
 const float gravity = 4000.0f;
-const float jumpSpeed = 1000.0f;
+const float jumpSpeed = 800.0f;
 
 class Player{
 private:
@@ -33,5 +33,5 @@ public:
     void Draw();
     void Update();
     Rectangle GetRect(); // returns player hitbox rectangle
-    void DrawHitbox(bool isColliding);
+    void DrawHitbox(bool);
 };

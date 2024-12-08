@@ -60,7 +60,6 @@ void Player::Update(){
 
     // Animation
     if(onGround){
-        velocity.y = 0;
         position.y = ground;
         framesCounter++;
         if(framesCounter >= (60 / framesSpeed)){
@@ -74,7 +73,6 @@ void Player::Update(){
     }else{
         currentFrame = 0;
         frameRec.x = (float)currentFrame*(float)ryan.width/6;
-        velocity.y += 1;
     }
 }
 
