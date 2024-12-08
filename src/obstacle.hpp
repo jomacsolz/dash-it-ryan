@@ -13,7 +13,7 @@ private:
     float speed;
     float speedMulti;
 public:
-    Obstacle();
+    Obstacle(Texture2D);
     ~Obstacle();
     void InitObstacle(float);
     void Draw();
@@ -35,7 +35,7 @@ private:
 
 public:
     ObstacleSpawn();
-    void Update();
+    void Update(Texture2D);
     void Draw();
     void SpeedUp(float);
     void resetSpeed();

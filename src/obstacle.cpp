@@ -1,32 +1,33 @@
 #include "obstacle.hpp"
 
-Obstacle::Obstacle(){
-    obs = LoadTexture("assets/obstacle.png");
-    position = {(float)GetScreenWidth(), (3*720)/4 + 50};
+Obstacle::Obstacle(Texture2D texture){
+    obs = texture;
+    position = {(float)GetScreenWidth(), (float)(3*720)/4 + obs.height/2};
     speed = 8.0f;
     speedMulti = 1.0f;
 }
 
 Obstacle::~Obstacle(){
-    UnloadTexture(obs);
+    
 }
 
 void Obstacle::InitObstacle(float multiplier){
-    position = {(float)GetScreenWidth(), (3*720)/4 + 50};
+    position = {(float)GetScreenWidth(), (float)(3*720)/4 + obs.height/2};
     speed = 8.0f;
     speedMulti = multiplier;
 }
 
 void Obstacle::Draw(){
+    DrawTexture(obs, position.x, position.y, WHITE);
 }
 
 void Obstacle::Update(){
     position.x -= speed * speedMulti;
-    DrawRectangleLinesEx(GetRect(), 5, RED);
+    // DrawRectangleLinesEx(GetRect(), 1, RED); // display hitbox
 }
 
 Rectangle Obstacle::GetRect(){
-    return Rectangle{position.x, position.y, 50, 50};
+    return Rectangle{position.x, position.y, (float)obs.width, (float)obs.height};
 }
 
 void Obstacle::SpeedUp(float x){
@@ -45,10 +46,10 @@ ObstacleSpawn::ObstacleSpawn(){
     globalSpeed = 1.0f;
 }
 
-void ObstacleSpawn::Update(){
+void ObstacleSpawn::Update(Texture2D texture){
     spawnTimer += GetFrameTime();
     if(spawnTimer >= spawnInterval && obstacles.size() < 4){
-        Obstacle newObstacle;
+        Obstacle newObstacle(texture);
         newObstacle.InitObstacle(globalSpeed);
         obstacles.push_back(newObstacle);
         spawnTimer = 0.0f;
