@@ -3,6 +3,7 @@
 #include "ryan.hpp"
 #include "bg.hpp"
 #include "obstacle.hpp"
+#include "powerup.hpp"
 
 #define NUM_FRAMES 2
 
@@ -13,6 +14,16 @@ bool CheckCollision(Player& player, std::vector<Obstacle>& obstacles){
     for(auto& obstacle: obstacles){
         if(CheckCollisionRecs(player.GetRect(), obstacle.GetRect()))
             return true;
+    }
+    return false;
+}
+
+bool CheckPowerCollision(Player& player, std::vector<Powerup>& powerups){
+    for(auto i = powerups.begin(); i != powerups.end(); i++){
+        if(CheckCollisionRecs(player.GetRect(), i->GetRect())){
+            powerups.erase(i);
+            return true;
+        }
     }
     return false;
 }
@@ -31,6 +42,7 @@ int main(){
     int fpsCounter = 0;
 
     int score = 0;
+    int highScore = 0;
     float scoreTimer = 0.0f;
     const float scoreInterval = 0.1f;
 
@@ -63,6 +75,17 @@ int main(){
     Music gameBGM = LoadMusicStream("assets/audio/ingame.wav");
     Music menuBGM = LoadMusicStream("assets/audio/menu.wav");
     Sound deathSFX = LoadSound("assets/audio/death.wav");
+
+    // Powerup Textures
+    std::vector<Texture2D> powerupTex = {
+        LoadTexture("assets/powerups/pu_1_5.png"),
+        LoadTexture("assets/powerups/pu_2.png"),
+        LoadTexture("assets/powerups/pu_3.png"),
+        LoadTexture("assets/powerups/shield.png"),
+        LoadTexture("assets/powerups/slow.png"),
+        LoadTexture("assets/powerups/speed.png"),
+        LoadTexture("assets/powerups/loop.png")
+    };
     
     SetTargetFPS(60);
 
@@ -70,6 +93,7 @@ int main(){
     Player ryan;
     ObstacleSpawn bugs;
     Texture2D bugTex = LoadTexture("assets/obstacle.png");
+    PowerupSpawn power;
 
     PlayMusicStream(menuBGM);
 
@@ -122,9 +146,10 @@ int main(){
             } break;
             case INSTRUCTION1:
             {
-                if(IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)){
+                if(IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER))
                     currentScreen = INSTRUCTION2;
-                }
+                else if(IsKeyPressed(KEY_BACKSPACE))
+                    currentScreen = TITLE;
             } break;
             case INSTRUCTION2:
             {
@@ -132,7 +157,8 @@ int main(){
                     currentScreen = GAMEPLAY;
                     StopMusicStream(menuBGM);
                     PlayMusicStream(gameBGM);
-                }
+                } else if(IsKeyPressed(KEY_BACKSPACE))
+                    currentScreen = INSTRUCTION1;
             } break;
             case GAMEPLAY:
             {
@@ -142,9 +168,15 @@ int main(){
                     score++;
                     scoreTimer = 0.0f;
 
-                    if(score % 50 == 0){
+                    if(score % 100 == 0){
                         bg.SpeedUp(1.0f);
                         bugs.SpeedUp(0.1f);
+                    }
+
+                    if(score % 100 == 0){
+                        int rando = rand() % powerupTex.size() - 1;
+                        Powerup newPowerup(powerupTex[rando], bugs.getSpeed());
+                        power.getPowerups().push_back(newPowerup);
                     }
                 }
             } break;
@@ -158,10 +190,10 @@ int main(){
                     bugs = ObstacleSpawn(); // reset obstacles
                 } else if(IsKeyPressed(KEY_R)){ // restart game
                     currentScreen = GAMEPLAY;
-                    score = 0; // reset score
-                    bg.resetSpeed(); // reset bg speed
-                    bugs.resetSpeed(); // reset obstacle speed
-                    bugs = ObstacleSpawn(); // reset obstacles
+                    score = 0;
+                    bg.resetSpeed();
+                    bugs.resetSpeed();
+                    bugs = ObstacleSpawn();
                     PlayMusicStream(gameBGM);
                 }
             } break;
@@ -170,7 +202,6 @@ int main(){
 
         bg.Update();
         ryan.Update();
-        // bugs.Update(bugTex);
 
         BeginDrawing();
 
@@ -216,8 +247,12 @@ int main(){
                     ryan.Draw();
 
                     // Obstacle Draw
-                    bugs.Update(bugTex);
+                    bugs.Update(bugTex, power.powerupActive());
                     bugs.Draw();
+
+                    // Powerup Draw
+                    power.Update();
+                    power.Draw();
 
                     // score display
                     DrawText(TextFormat("Score: %i", score), screenWidth-150, 10, 20, WHITE);
@@ -227,18 +262,31 @@ int main(){
                         PlaySound(deathSFX);
                         StopMusicStream(gameBGM);
                     }
+
+                    if(CheckPowerCollision(ryan, power.getPowerups())){
+                        // add powerup effects here
+                    }
                 } break;
                 case ENDING:
                 {
+                    if(score > highScore)
+                        highScore = score;
+
                     DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
-                    // textWidth = MeasureText("Game Over", 40);
-                    // DrawText("Game Over", (screenWidth - textWidth) / 2, (screenHeight - 40) / 2, 40, RED);
                     DrawTextureEx(menu, (Vector2){0,0}, 0.0f, scaleImg(menu), WHITE); // bg image
                     DrawTexture(end, 0, 0, WHITE);
+
                     textWidth = MeasureText(TextFormat("Score: %i", score), 40);
                     DrawText(TextFormat("Score: %i", score), (screenWidth - textWidth) / 2, (screenHeight - 40) / 2 + 40, 40, WHITE);
+
+                    textWidth = MeasureText(TextFormat("Highest score: %i", highScore), 20);
+                    DrawText(TextFormat("Highest score: %i", highScore), (screenWidth - textWidth) / 2, (screenHeight - 20) / 2 + 80, 20, WHITE);
+
                     textWidth = MeasureText("Press Enter or Tab to return to title screen", 20);
-                    DrawText("Press Enter or Tab to return to title screen", (screenWidth - textWidth) / 2, (screenHeight - 20) / 2 + 80, 20, GRAY);
+                    DrawText("Press Enter or Tab to return to title screen", (screenWidth - textWidth) / 2, (screenHeight - 20) / 2 + 120, 20, GRAY);
+
+                    textWidth = MeasureText("Press R to restart", 20);
+                    DrawText("Press R to restart", (screenWidth - textWidth) / 2, (screenHeight - 20) / 2 + 140, 20, GRAY);
                 } break;
                 default: break;
             }

@@ -40,15 +40,19 @@ void Obstacle::resetSpeed(){
     std::cout << "Obstacle speed multiplier reset: " << speedMulti << std::endl;
 }
 
+float Obstacle::getSpeed(){
+    return speedMulti;
+}
+
 ObstacleSpawn::ObstacleSpawn(){
     spawnTimer = 0.0f;
     spawnInterval = 1.0f;
     globalSpeed = 1.0f;
 }
 
-void ObstacleSpawn::Update(Texture2D texture){
+void ObstacleSpawn::Update(Texture2D texture, bool power){
     spawnTimer += GetFrameTime();
-    if(spawnTimer >= spawnInterval && obstacles.size() < 4){
+    if(!power && spawnTimer >= spawnInterval && obstacles.size() < 4){
         Obstacle newObstacle(texture);
         newObstacle.InitObstacle(globalSpeed);
         obstacles.push_back(newObstacle);
@@ -85,4 +89,8 @@ void ObstacleSpawn::resetSpeed(){
 
 std::vector<Obstacle> &ObstacleSpawn::getObstacles(){
     return obstacles;
+}
+
+float ObstacleSpawn::getSpeed(){
+    return obstacles[0].getSpeed();
 }

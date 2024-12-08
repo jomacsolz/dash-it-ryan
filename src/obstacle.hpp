@@ -24,6 +24,7 @@ public:
     // speed functions
     void SpeedUp(float);
     void resetSpeed();
+    float getSpeed();
 };
 
 class ObstacleSpawn{
@@ -35,9 +36,10 @@ private:
 
 public:
     ObstacleSpawn();
-    void Update(Texture2D);
+    void Update(Texture2D, bool);
     void Draw();
     void SpeedUp(float);
     void resetSpeed();
     std::vector<Obstacle>& getObstacles();
+    float getSpeed();
 };
