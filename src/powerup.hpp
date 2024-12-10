@@ -1,7 +1,8 @@
 #pragma once
 #include <raylib.h>
-#include <vector>
+#include <queue>
 #include <algorithm>
+#include <iostream>
 
 class Powerup{
 private:
@@ -24,6 +25,8 @@ public:
     void Update();
     Rectangle GetRect();
     void resetSpeed();
+    float getSpeed();
+    void setSpeed(float);
 };
 
 class PowerupSpawn{
@@ -36,9 +39,11 @@ private:
 
 public:
     PowerupSpawn();
-    void Update();
+    void Update(bool&, float&, float);
     void Draw();
     void resetSpeed();
     std::vector<Powerup>& getPowerups();
     bool powerupActive();
+    float getSpeed();
+    void setSpeed(float);
 };

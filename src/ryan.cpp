@@ -7,6 +7,8 @@ Player::Player(){
     velocity = {0.0f, 0.0f};
     position = {(1280/25), ground};
     jumpSFX = LoadSound("assets/audio/jump.wav");
+    jumpSpeed = 800.0f;
+    gravity = 4000.0f;
 
     // jump vars
     isJumping = false;
@@ -26,8 +28,8 @@ Player::~Player(){
     UnloadSound(jumpSFX);
 }
 
-void Player::Draw(){
-    DrawTextureRec(ryan, frameRec, position, WHITE);
+void Player::Draw(Color tint){
+    DrawTextureRec(ryan, frameRec, position, tint);
 }
 
 void Player::Update(){
@@ -83,4 +85,14 @@ Rectangle Player::GetRect(){
 void Player::DrawHitbox(bool isColliding){
     Color outlineColor = isColliding ? RED : GREEN;
     DrawRectangleLinesEx(GetRect(), 3, outlineColor);
+}
+
+void Player::slowJump(bool isSlow){
+    if(isSlow){
+        jumpSpeed = 1000.0f;
+        gravity = 2000.0f;
+    }else{
+        jumpSpeed = 800.0f;
+        gravity = 4000.0f;
+    }
 }

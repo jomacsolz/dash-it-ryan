@@ -19,7 +19,10 @@ public:
     void Draw();
     void Update();
     void SpeedUp(float);
+    void SpeedDown();
     void resetSpeed();
     float scaleImg(Texture2D img);
+    float getSpeed();
+    void setSpeed(float);
 };
 

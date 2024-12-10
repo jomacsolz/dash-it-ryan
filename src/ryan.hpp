@@ -4,8 +4,8 @@
 typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, INSTRUCTION1, INSTRUCTION2, ENDING } GameScreen;
 
 const float maxJump = 0.35f;
-const float gravity = 4000.0f;
-const float jumpSpeed = 800.0f;
+// const float gravity = 4000.0f;
+// const float jumpSpeed = 800.0f;
 
 class Player{
 private:
@@ -13,6 +13,8 @@ private:
     float ground;
     Vector2 velocity;
     Vector2 position;
+    float jumpSpeed;
+    float gravity;
 
     // jump variables
     bool isJumping;
@@ -30,8 +32,9 @@ private:
 public:
     Player();
     ~Player();
-    void Draw();
+    void Draw(Color tint = WHITE);
     void Update();
     Rectangle GetRect(); // returns player hitbox rectangle
     void DrawHitbox(bool);
+    void slowJump(bool);
 };

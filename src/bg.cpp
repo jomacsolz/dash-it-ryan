@@ -51,13 +51,25 @@ void BG::SpeedUp(float x){
     std::cout << "Background speed increased: " << bgSpeed << std::endl;
 }
 
+void BG::SpeedDown(){
+    bgSpeed -= 2.0f;
+}
+
 void BG::resetSpeed(){
     bgSpeed = 1.0f;
-    std::cout << "Background speed reset: " << bgSpeed << std::endl;
+    // std::cout << "Background speed reset: " << bgSpeed << std::endl;
 }
 
 float BG::scaleImg(Texture2D img){
     float scaleX = (float)GetScreenWidth() / img.width;
     float scaleY = (float)GetScreenHeight() / img.height;
     return (scaleX > scaleY) ? scaleX : scaleY;
+}
+
+float BG::getSpeed(){
+    return bgSpeed;
+}
+
+void BG::setSpeed(float x){
+    bgSpeed = x;
 }
