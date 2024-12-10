@@ -30,8 +30,7 @@ public:
 class ObstacleSpawn{
 private:
     std::vector<Obstacle> obstacles;
-    float spawnTimer;
-    float spawnInterval;
+    float spawnDistance;
     float globalSpeed;
 
 public:

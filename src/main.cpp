@@ -157,7 +157,7 @@ int main(){
                     currentScreen = GAMEPLAY;
                     StopMusicStream(menuBGM);
                     PlayMusicStream(gameBGM);
-                } else if(IsKeyPressed(KEY_BACKSPACE))
+                }else if(IsKeyPressed(KEY_BACKSPACE))
                     currentScreen = INSTRUCTION1;
             } break;
             case GAMEPLAY:
@@ -174,7 +174,7 @@ int main(){
                     }
 
                     if(score % 100 == 0){
-                        int rando = rand() % powerupTex.size() - 1;
+                        int rando = rand() % powerupTex.size();
                         Powerup newPowerup(powerupTex[rando], bugs.getSpeed());
                         power.getPowerups().push_back(newPowerup);
                     }
@@ -188,7 +188,7 @@ int main(){
                     bg.resetSpeed(); // reset bg speed
                     bugs.resetSpeed(); // reset obstacle speed
                     bugs = ObstacleSpawn(); // reset obstacles
-                } else if(IsKeyPressed(KEY_R)){ // restart game
+                }else if(IsKeyPressed(KEY_R)){ // restart game
                     currentScreen = GAMEPLAY;
                     score = 0;
                     bg.resetSpeed();
@@ -256,21 +256,20 @@ int main(){
 
                     // score display
                     DrawText(TextFormat("Score: %i", score), screenWidth-150, 10, 20, WHITE);
+
+                    if(CheckPowerCollision(ryan, power.getPowerups())){
+                        // add powerup effects here
+                    }
                     
                     if(CheckCollision(ryan, bugs.getObstacles())){
                         currentScreen = ENDING;
                         PlaySound(deathSFX);
                         StopMusicStream(gameBGM);
                     }
-
-                    if(CheckPowerCollision(ryan, power.getPowerups())){
-                        // add powerup effects here
-                    }
                 } break;
                 case ENDING:
                 {
-                    if(score > highScore)
-                        highScore = score;
+                    if(score > highScore) highScore = score;
 
                     DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
                     DrawTextureEx(menu, (Vector2){0,0}, 0.0f, scaleImg(menu), WHITE); // bg image

@@ -45,19 +45,19 @@ float Obstacle::getSpeed(){
 }
 
 ObstacleSpawn::ObstacleSpawn(){
-    spawnTimer = 0.0f;
-    spawnInterval = 1.0f;
+    spawnDistance = 200.0f;
     globalSpeed = 1.0f;
 }
 
 void ObstacleSpawn::Update(Texture2D texture, bool power){
-    spawnTimer += GetFrameTime();
-    if(!power && spawnTimer >= spawnInterval && obstacles.size() < 4){
-        Obstacle newObstacle(texture);
-        newObstacle.InitObstacle(globalSpeed);
-        obstacles.push_back(newObstacle);
-        spawnTimer = 0.0f;
-        spawnInterval = 1.0f + (rand() % 2);
+    if(power) spawnDistance += 300.0f;
+    if(!power && obstacles.size() < 3){
+        if(obstacles.empty() || (GetScreenWidth() - obstacles.back().GetRect().x) >= spawnDistance){
+            Obstacle newObstacle(texture);
+            newObstacle.InitObstacle(globalSpeed);
+            obstacles.push_back(newObstacle);
+            spawnDistance = 600.0f + rand() % 601;
+        }
     }
 
     for(auto& obstacle : obstacles){
@@ -92,5 +92,8 @@ std::vector<Obstacle> &ObstacleSpawn::getObstacles(){
 }
 
 float ObstacleSpawn::getSpeed(){
-    return obstacles[0].getSpeed();
+    if(!obstacles.empty()){
+        return obstacles[0].getSpeed();
+    }
+    return 1.0f; // or some default value
 }
