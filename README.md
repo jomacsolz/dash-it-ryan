@@ -1,5 +1,6 @@
 # DASH IT RYAN
 A project for CMSC 123
+
 Members: Dinopol, Guarin, Lumacad, Rufila, Solis John
 
 ## Introduction
@@ -43,11 +44,3 @@ Genre: Platformer
 For detailed information, please refer to the [Mechanics Documentation](https://docs.google.com/document/d/1R4XsC3hGl2h4oowbEdUI1bmY6RvryJrRJZQfATuEQ5s/edit?usp=sharing).
 
 Assets can be found on this [drive](https://drive.google.com/drive/folders/1z2p_s0KKEH10Umre7IEaEd7_8t4uDCBA?usp=sharing).
-
-## TODO
-- menu screens
-- player movement (jump)
-- collisions
-- random obstacle generation
-- score counter
-- power up mechanics
