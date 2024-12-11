@@ -1,5 +1,6 @@
 # DASH IT RYAN
 A project for CMSC 123
+Members: Dinopol, Guarin, Lumacad, Rufila, Solis John
 
 ## Introduction
 
